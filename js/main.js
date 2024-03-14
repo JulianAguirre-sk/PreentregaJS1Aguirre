@@ -22,7 +22,7 @@ function promediarAlumno(){
         
     }
 
-    if (contador > 0) {
+    if (contador > 1) {
         promedio = suma / contador;
         if (nombre !== null) {
             alert("El promedio de las notas del alumno " + nombre + " es " + promedio.toFixed(2) + " a continuacion se refrescara la pagina");

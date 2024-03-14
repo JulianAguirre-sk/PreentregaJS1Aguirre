@@ -15,9 +15,9 @@ function promediarAlumno(){
         suma += parseFloat(nota);
         contador++;
         if (nombre !== null) {
-            nota = prompt('Ingrese una nota para el alumno ' + nombre + ' (entre 1 y 10) o presione cancelar para terminar');
+            nota = prompt('Ingrese la siguiente nota para el alumno ' + nombre + ' (entre 1 y 10) o presione cancelar para terminar');
         } else {
-            nota = prompt('Ingrese una nota para el alumno (entre 1 y 10) o presione cancelar para terminar');
+            nota = prompt('Ingrese la siguiente nota para el alumno (entre 1 y 10) o presione cancelar para terminar');
         }
         
     }

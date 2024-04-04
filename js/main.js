@@ -1,43 +1,63 @@
-function promediarAlumno(){
-    let nombre = prompt('Ingrese el nombre y apellido o codigo del alumno a promediar');
-    let contador = 0;
-    let suma = 0;
-    let promedio = 0;
-    let nota = "";
-    
-    if (nombre !== null) {
-        nota = prompt('Ingrese una nota para el alumno ' + nombre + ' (entre 1 y 10) o presione cancelar para terminar');
-    } else {
-        nota = prompt('Ingrese una nota para el alumno (entre 1 y 10) o presione cancelar para terminar');
-    }
-    
-    while (nota !== null && !isNaN(nota) && nota >= 1 && nota <= 10){
-        suma += parseFloat(nota);
-        contador++;
-        if (nombre !== null) {
-            nota = prompt('Ingrese la siguiente nota para el alumno ' + nombre + ' (entre 1 y 10) o presione cancelar para terminar');
-        } else {
-            nota = prompt('Ingrese la siguiente nota para el alumno (entre 1 y 10) o presione cancelar para terminar');
+let banco = {
+    clientes: [],
+    agregarCliente: function(nombre, saldo) {
+        this.clientes.push({nombre: nombre, saldo: saldo});
+    },
+    buscarCliente: function(nombre) {
+        let clientesFiltrados = this.clientes.filter(function(cliente) {
+            return cliente.nombre === nombre;
+        });
+        return clientesFiltrados.length > 0 ? clientesFiltrados[0] : null;
+    },
+    transferir: function(nombreOrigen, nombreDestino, monto) {
+        let clienteOrigen = this.buscarCliente(nombreOrigen);
+        let clienteDestino = this.buscarCliente(nombreDestino);
+        if(clienteOrigen === null || clienteDestino === null) {
+            return false;
         }
-        
-    }
-
-    if (contador > 1) {
-        promedio = suma / contador;
-        if (nombre !== null) {
-            alert("El promedio de las notas del alumno " + nombre + " es " + promedio.toFixed(2) + " a continuacion se refrescara la pagina");
-        } else {
-            alert("El promedio de las notas del alumno es " + promedio.toFixed(2) + " a continuacion se refrescara la pagina");
+        if(clienteOrigen.saldo < monto) {
+            return false;
         }
-    } else {
-        if (nombre !== null) {
-            alert("No se ingresaron notas válidas para el alumno " + nombre + " a continuacion se refrescara la pagina");
-        } else {
-            alert("No se ingresaron notas válidas para el alumno a continuacion se refrescara la pagina");
-        }
+        clienteOrigen.saldo -= monto;
+        clienteDestino.saldo += monto;
+        return true;
     }
+};
 
-    location.reload();
-}
-
-promediarAlumno()
+let opcion;
+do {
+    opcion = parseInt(prompt('Ingrese el numero de la accion que desea realizar:\n1. Agregar cliente\n2. Ver saldo\n3. Transferir\n4. Salir'));
+    switch(opcion) {
+        case 1:
+            let nombre = prompt("Ingrese el nombre del cliente");
+            let saldo = parseFloat(prompt("Ingrese el saldo inicial del cliente"));
+            banco.agregarCliente(nombre, saldo);
+            alert("Cliente agregado exitosamente");
+            break;
+        case 2:
+            let nombreBusqueda = prompt("Ingrese el nombre del cliente a buscar");
+            let cliente = banco.buscarCliente(nombreBusqueda);
+            if(cliente === null) {
+                alert("Cliente no encontrado");
+            } else {
+                alert("El saldo del cliente " + cliente.nombre + " es: " + cliente.saldo);
+            }
+            break;
+        case 3:
+            let nombreOrigen = prompt("Ingrese el nombre del cliente que transfiere");
+            let nombreDestino = prompt("Ingrese el nombre del cliente que recibe la transferencia");
+            let monto = parseFloat(prompt("Ingrese el monto a transferir"));
+            if(banco.transferir(nombreOrigen, nombreDestino, monto)) {
+                alert("Transferencia realizada exitosamente");
+            } else {
+                alert("No se pudo realizar la transferencia");
+            }
+            break;
+        case 4:
+            alert("Gracias por usar nuestro servicio");
+            break;
+        default:
+            alert("Opción no válida");
+            break;
+    }
+} while(opcion !== 4);
